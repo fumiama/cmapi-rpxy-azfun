@@ -4,3 +4,4 @@
 
 azure-functions
 cloudscraper
+urllib3
