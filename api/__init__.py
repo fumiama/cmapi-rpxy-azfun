@@ -4,9 +4,9 @@ import azure.functions as func
 import cloudscraper
 
 api = "https://api.copymanga.com/api"
+scraper = cloudscraper.create_scraper()
 
-def getapibody(para: str) -> str:
-    scraper = cloudscraper.create_scraper()
+def getapibody(para: str) -> str:    
     u = api + para
     logging.info("get "+u)
     s = scraper.get(u)
