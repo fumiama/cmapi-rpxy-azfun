@@ -3,13 +3,13 @@ import logging
 import azure.functions as func
 import cloudscraper
 
-api = "https://hi77-overseas.mangafuna.xyz/"
+apiprefix = "https://"
 scraper = cloudscraper.create_scraper()
 
 cache = {}
 
 def getapibody(para: str) -> bytes:    
-    u = api + para
+    u = apiprefix + para
     if u in cache.keys():
         logging.info("get cached "+u)
         return cache[u]
@@ -22,7 +22,7 @@ def getapibody(para: str) -> bytes:
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     para = req.params.get("url")
-    if not para or not para.startswith(api):
+    if not para or not para.startswith(apiprefix):
         return func.HttpResponse("400 Bad requset", status_code=400)
-    para = para[len(api):]
+    para = para[len(apiprefix):]
     return func.HttpResponse(getapibody(para), status_code=200)
