@@ -5,3 +5,4 @@
 azure-functions
 cloudscraper
 urllib3
+cachetools
