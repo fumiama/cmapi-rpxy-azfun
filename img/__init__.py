@@ -5,7 +5,7 @@ import cachetools
 import azure.functions as func
 import cloudscraper
 
-apiprefix = "https://"
+apiprefix = "https://hi77-overseas.mangafuna.xyz/"
 scraper = cloudscraper.create_scraper()
 
 cache = cachetools.TTLCache(maxsize=1024*1024*1024, ttl=10*60)
