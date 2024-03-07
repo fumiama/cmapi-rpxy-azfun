@@ -5,13 +5,12 @@ import cachetools
 import azure.functions as func
 import cloudscraper
 
-apiprefix = "https://hi77-overseas.mangafuna.xyz/"
+apiprefixs = ["https://hi77-overseas.mangafuna.xyz/", "https://sm.mangafuna.xyz/"]
 scraper = cloudscraper.create_scraper()
 
 cache = cachetools.TTLCache(maxsize=1024*1024*1024, ttl=10*60)
 
-def getapibody(para: str) -> typing.Tuple[bytes, bool]:
-    u = apiprefix + para
+def getapibody(u: str) -> typing.Tuple[bytes, bool]:
     d = cache.get(u)
     if d is not None:
         logging.info("get cached "+u)
@@ -25,9 +24,8 @@ def getapibody(para: str) -> typing.Tuple[bytes, bool]:
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     para = req.params.get("url")
-    if not para or not para.startswith(apiprefix):
+    if not para or not (para.startswith(apiprefixs[0]) or para.startswith(apiprefixs[1])):
         return func.HttpResponse("400 Bad requset", status_code=400)
-    para = para[len(apiprefix):]
     d, cached = getapibody(para)
     resp = func.HttpResponse(d, status_code=200)
     resp.headers.add_header("Cached", str(cached))
