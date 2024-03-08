@@ -1,14 +1,18 @@
 import logging
 import typing
 import cachetools
+import re
 
 import azure.functions as func
 import cloudscraper
 
-apiprefixs = ["https://hi77-overseas.mangafuna.xyz/", "https://sm.mangafuna.xyz/", "https://sj.mangafuna.xyz/"]
+
+pattern = re.compile(r'^https://[0-9a-z-]+\.mangafuna\.xyz/')
+
 scraper = cloudscraper.create_scraper()
 
 cache = cachetools.TTLCache(maxsize=1024*1024*1024, ttl=10*60)
+
 
 def getapibody(u: str) -> typing.Tuple[bytes, bool]:
     d = cache.get(u)
@@ -22,9 +26,10 @@ def getapibody(u: str) -> typing.Tuple[bytes, bool]:
     cache[u] = d
     return d, False
 
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     para = req.params.get("url")
-    if not para or not (para.startswith(apiprefixs[0]) or para.startswith(apiprefixs[1])):
+    if not para or not pattern.match(para):
         return func.HttpResponse("400 Bad requset", status_code=400)
     d, cached = getapibody(para)
     resp = func.HttpResponse(d, status_code=200)
