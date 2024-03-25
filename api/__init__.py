@@ -1,6 +1,5 @@
 import re
 import requests
-import logging
 
 import azure.functions as func
 
@@ -20,16 +19,21 @@ def getapibody(u: str, method: str, body: bytes, headers: dict) -> bytes:
     else: return s
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
+    global pattern
     para = req.params.get("url")
     if not para or not pattern.match(para):
         return func.HttpResponse("400 Bad Requset: no url param", status_code=400)
     h = {
-        "User-Agent": "COPY/2.0.7",
+        "user-agent": "COPY/2.0.7",
         "source": "copyApp",
         "webp": "1",
         "version": "2.0.7",
         "platform": "3",
+        "accept": "application/json",
+        "authorization": "Token",
+        "region": "0",
     } # 保底
-    for k, v in req.headers.items(): h[k] = v
-    resp = func.HttpResponse(getapibody(para, req.method, req.get_body(), h), status_code=200)
-    return resp
+    for k, v in req.headers.items(): h[k.lower()] = v
+    d = getapibody(para, req.method, req.get_body(), h)
+    if len(d): return func.HttpResponse(d, status_code=200)
+    return func.HttpResponse("504 Gateway Timeout: Empty Response From Upstream", status_code=504)
