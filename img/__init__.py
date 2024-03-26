@@ -19,7 +19,7 @@ def getapibody(u: str) -> typing.Tuple[bytes, bool]:
         return d, True
     logging.info("get new "+u)
     s = scraper.get(u)
-    d = s._content
+    d = s.content
     s.close()
     cache[u] = d
     return d, False

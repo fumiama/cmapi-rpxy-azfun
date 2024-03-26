@@ -3,3 +3,6 @@
 local.settings.json
 test
 .venv
+simp.go
+go.mod
+go.sum
