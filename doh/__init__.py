@@ -30,7 +30,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     para = req.params.get("name")
     if not para or not pattern.match(para):
         return func.HttpResponse("400 Bad requset", status_code=400)
-    d, cached = getapibody(dohurl+quote(para))
+    typ = req.params.get("type", "1")
+    d, cached = getapibody(dohurl+quote(para)+"&type="+quote(typ))
     resp = func.HttpResponse(d, status_code=200, mimetype="application/json")
     resp.headers.add_header("Cached", str(cached))
     return resp

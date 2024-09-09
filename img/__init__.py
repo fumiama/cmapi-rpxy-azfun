@@ -7,7 +7,7 @@ import azure.functions as func
 import cloudscraper
 
 
-pattern = re.compile(r'^https://[0-9a-z-]+\.mangafun[a-z]\.xyz/')
+pattern = re.compile(r'^https://[0-9a-z-]+\.mangafun[a-z]\.(xyz|fun)/')
 scraper = cloudscraper.create_scraper()
 cache = cachetools.TTLCache(maxsize=1024*1024*1024, ttl=10*60)
 
