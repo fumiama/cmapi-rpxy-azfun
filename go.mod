@@ -4,10 +4,7 @@ go 1.21
 
 toolchain go1.22.1
 
-require (
-	github.com/fumiama/go-base16384 v1.7.0
-	golang.org/x/net v0.35.0
-)
+require github.com/fumiama/go-base16384 v1.7.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

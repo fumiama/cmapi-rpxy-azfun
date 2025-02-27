@@ -1,7 +1,8 @@
 import re
 from os import getenv, chmod
 from platform import system, machine
-from io import BytesIO, FileIO
+from io import BytesIO
+from multiprocessing import Lock
 from typing import Tuple, Union
 
 import azure.functions as func
@@ -11,6 +12,8 @@ use_pipe = not not getenv("CMAPI_USE_PIPE", False)
 pattern = re.compile(r'^https://api\.(copymanga|mangacopy)\.\w+/api/')
 
 apierr = None
+
+lk = Lock()
 
 if use_pipe:
     import subprocess
@@ -30,11 +33,14 @@ if use_pipe:
         }
         data = (system() + " " + machine() + " " + str(simp_path) + ": " + str(simp_path.exists()) + " " + str(simp_path.stat()) + "\n" + str(cap)).encode()
         try:
-            tmpp = "/tmp/simp"
-            with open(tmpp, "wb") as tmpf:
-                with open(simp_path, "rb") as sf:
-                    tmpf.write(sf.read())
-            chmod(tmpp, 0o755)
+            tmpp = Path("/tmp/simp")
+            lk.acquire()
+            if not tmpp.exists():
+                with open(tmpp, "wb") as tmpf:
+                    with open(simp_path, "rb") as sf:
+                        tmpf.write(sf.read())
+                chmod(tmpp, 0o755)
+            lk.release()
             stdin = BytesIO()
             if body and len(body):
                 stdin.write(struct.pack("<q", len(body)))
