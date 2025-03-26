@@ -6,3 +6,5 @@ test
 simp.go
 go.mod
 go.sum
+open_key
+simp.go

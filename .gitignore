@@ -136,3 +136,6 @@ __azurite_db*__.json
 
 simp
 /usr
+open_key
+simp.go
+.DS_Store
