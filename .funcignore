@@ -3,8 +3,9 @@
 local.settings.json
 test
 .venv
+
 simp.go
 go.mod
 go.sum
 open_key
-simp.go
+.DS_Store

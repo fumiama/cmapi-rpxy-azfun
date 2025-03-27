@@ -57,9 +57,6 @@ if use_pipe:
             if len(r.stderr): return ("simp_pipe: " + r.stderr.decode()).encode(), 500
             cap = loads(data)
             data = b64decode(cap["D"])
-            coding = cap["H"].get("Content-Encoding", None)
-            if coding:
-                data = MultiDecoder(coding).decompress(data)
             return data, cap["C"]
         except Exception as e:
             return ("simp_pipe: " + repr(e) + "\n\n" + b64encode(data).decode()).encode(), 500
