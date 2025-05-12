@@ -9,7 +9,7 @@ import azure.functions as func
 
 use_pipe = not not getenv("CMAPI_USE_PIPE", False)
 
-pattern = re.compile(r'^https://(api|www)\.(copymanga|mangacopy|copy-manga)\.\w+/api/')
+pattern = re.compile(r'^https://(api|www)\.(copymanga|mangacopy|copy-manga|copy20)\.\w+/api/')
 
 apierr = None
 
