@@ -21,7 +21,6 @@ if use_pipe:
     from pathlib import Path
     from json import dumps, loads
     from base64 import b64decode, b64encode
-    from urllib3.response import MultiDecoder
 
     simp_path = Path(__file__).parent.parent/'simp'
 
